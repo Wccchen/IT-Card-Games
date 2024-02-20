@@ -11,7 +11,6 @@ public class AI extends Player  {
 	private int health;
 	private int mana;
     private boolean userOwned;
-    private Hand handObject;
     
 	public AI(int health, int mana) {
 		super(health, mana);
@@ -20,11 +19,10 @@ public class AI extends Player  {
 	public AI(boolean userOwned) {
 		super(userOwned);
 	}
-	
-	public void aiMoved(ActorRef out, Avatar avatar, Tile tile) {
-		BasicCommands.moveUnitToTile(out, avatar.getUnit(), tile);
-		try {Thread.sleep(4000);} catch (InterruptedException e) {e.printStackTrace();}
+	public void aiMoved(ActorRef out) {
+		BasicCommands.moveUnitToTile(out, null, null);
 	}
+	
 
 	
 

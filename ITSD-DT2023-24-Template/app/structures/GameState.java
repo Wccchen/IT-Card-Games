@@ -4,6 +4,7 @@ import structures.basic.MoveableUnit;
 import structures.basic.Player;
 import structures.basic.Board;
 import structures.basic.Tile;
+import structures.basic.AI;
 
 /**
  * This class can be used to hold information about the on-going game.
@@ -42,7 +43,7 @@ public class GameState {
 
 	public GameState() {
 		this.player1 = new Player(true);
-		this.player2 = new Player(false);
+		this.player2 = new AI(false);
 		this.board = new Board();
 	}
 
