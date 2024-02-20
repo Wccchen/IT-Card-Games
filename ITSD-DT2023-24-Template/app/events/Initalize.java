@@ -43,7 +43,7 @@ public class Initalize implements EventProcessor{
 		gameState.something = true;
 		// User 1 makes a change
 //		CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-//		//Loaders_2024_Check.test(out);
+//		Loaders_2024_Check.test(out);
 		//board rendering below
 		Board board = gameState.getBoard();
 		board.renderBoard(out);
@@ -51,6 +51,10 @@ public class Initalize implements EventProcessor{
 		//code for setting mana and health
 		int manaGained = gameState.getTurnNumber()+1;
 		Player player1 = gameState.getPlayer1();
+		//draw player1's initial 3 cards
+		player1.drawCard();
+		player1.drawCard();
+		player1.drawCard();
 		player1.setMana(player1.getMana()+manaGained, out);
 		BasicCommands.setPlayer1Health(out, player1); //only needed here, after this Player.setHealth will handle this
 

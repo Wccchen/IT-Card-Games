@@ -1,5 +1,6 @@
 package structures.basic;
 
+import actors.GameActor;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import utils.OrderedCardLoader;
@@ -28,6 +29,9 @@ public class Player {
 
 	private final OrderedCardLoader orderedCardLoader = new OrderedCardLoader();
 
+	private int lastCardClickedIndex = -1;
+	private Card lastCardClickedCard = null;
+
 	public Player(boolean userOwned) {
 		super();
 		this.health = 20;
@@ -41,12 +45,12 @@ public class Player {
 			this.playerDeck = OrderedCardLoader.getPlayer2Cards(2);
 		}
 
-		this.playerDeck = shuffleCards(convertDeck());
+		this.playerDeck = convertDeck();
 
 		int startingHandSize = 3;
-		for (int i = 0; i < startingHandSize; i++) {
-			drawCard();
-		}
+//		for (int i = 0; i < startingHandSize; i++) {
+//			drawCard();
+//		}
 
 	}
 	public Player(int health, int mana) {
@@ -55,7 +59,15 @@ public class Player {
 		this.mana = mana;
 	}
 
-    public void setDiscardPile(ArrayList<Card> discardPile) {
+	public int getLastCardClickedIndex() {
+		return lastCardClickedIndex;
+	}
+
+	public void setLastCardClickedIndex(int lastCardClickedIndex) {
+		this.lastCardClickedIndex = lastCardClickedIndex;
+	}
+
+	public void setDiscardPile(ArrayList<Card> discardPile) {
         this.discardPile = discardPile;
     }
 
@@ -128,6 +140,8 @@ public class Player {
 
 			if (this.getHand().size() < 5) {
 				this.getHand().add(cardAtTopOfDeck);
+				renderHand();
+
 			} else {
 				this.getDiscardPile().add(cardAtTopOfDeck);
 			}
@@ -135,6 +149,63 @@ public class Player {
 		} else {
 			System.out.println("deck is empty");
 		}
+
+	}
+
+	public void renderHand() {
+//		for (int i  = 0; i < this.getHand().size(); i++) {
+//			System.out.println("attempting to put " + this.getHand().get(i) + " into hand");
+//			BasicCommands.drawCard(GameActor.out, this.getHand().get(i), this.getHand().size()  + 1, 0);
+//			System.out.println(this.getHand());
+//		}
+
+		for (Card card : this.getHand()) {
+			System.out.println(card);
+			BasicCommands.drawCard(GameActor.out, card, this.getHand().size() + 1, 0);
+		}
+//		System.out.println(this.getPlayerDeck().size());
+	}
+
+	public Card getLastCardClickedCard() {
+		return lastCardClickedCard;
+	}
+
+	public void setLastCardClickedCard(Card lastCardClickedCard) {
+		this.lastCardClickedCard = lastCardClickedCard;
+	}
+
+	public void unhighlightAllCards() {
+		BasicCommands.drawCard(GameActor.out, this.getLastCardClickedCard(), this.getLastCardClickedIndex(), 0);
+	}
+	public void highlightCardInHand(int handPosition) {
+		Card cardSelected = this.getHand().get(handPosition - 2);
+
+		if(this.getLastCardClickedCard() != cardSelected) {
+			BasicCommands.drawCard(GameActor.out, this.getLastCardClickedCard(), this.getLastCardClickedIndex(), 0);
+		}
+
+		BasicCommands.drawCard(GameActor.out, cardSelected, handPosition, 1);
+		this.setLastCardClickedCard(cardSelected);
+		this.setLastCardClickedIndex(handPosition);
+
+
+	}
+
+	public void playCard(int handPosition) {
+		Card cardSelected = this.getHand().get(handPosition - 2);
+
+		if (this.getMana() >= cardSelected.getManacost()) {
+			this.setMana(this.getMana() - cardSelected.getManacost(), GameActor.out);
+			BasicCommands.deleteCard(GameActor.out, handPosition);
+			if (cardSelected.isCreature) {
+//			summonCreature(cardSelected);
+			} else {
+				((Spell) cardSelected).spellEffect();
+			}
+		} else {
+			System.out.println("Player does not have enough mana");
+		}
+
 
 	}
 
