@@ -4,6 +4,9 @@ import akka.actor.ActorRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import commands.BasicCommands;
 import structures.GameState;
+import utils.BasicObjectBuilders;
+import utils.StaticConfFiles;
+import utils.UnitCommands;
 
 public class Creature extends Card implements MoveableUnit {
 
@@ -27,31 +30,19 @@ public class Creature extends Card implements MoveableUnit {
 		this.turnSummoned = turnSummoned;
 		this.lastTurnMoved = lastTurnMoved;
 		this.unit = unit; //need to change this with basic object builder
+		//BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1000, Unit.class)
 		this.userOwned = userOwned;
 	}
 
 	@Override
 	public void attackUnit( ActorRef out, Tile tile, GameState gameState) {
-
-		MoveableUnit m = tile.getUnit();
-		//insert logic about if attack is possible.
-		int enemyHealth = m.getCurrentHealth();
-		BasicCommands.playUnitAnimation(out, this.unit, UnitAnimationType.attack); //attack animation
-		enemyHealth = enemyHealth - this.attack;
-		m.setCurrentHealth(enemyHealth, out);
-		if (enemyHealth>0){ //if enemy is alive, counterattack
-			BasicCommands.playUnitAnimation(out, m.getUnit(), UnitAnimationType.attack);//unit attack animation
-			this.setCurrentHealth((this.currentHealth-m.getAttack()),out);
-		}
+		UnitCommands.attackUnit(this,out,tile,gameState);
 	}
 
 
 	@Override
 	public void moveUnit(ActorRef out, Tile tile, GameState gameState) {
-		//logic about whether they can move will be within TileClicked
-		BasicCommands.moveUnitToTile(out, this.unit, tile); //front end rendering
-		tile.setUnit(this); //sets tiles unit to be this.
-
+		UnitCommands.moveUnit(this, out, tile, gameState);
 
 
 	}
@@ -78,6 +69,7 @@ public class Creature extends Card implements MoveableUnit {
 			BasicCommands.addPlayer1Notification(out, "playUnitAnimation [Death]", 3);
 			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.death);
 			try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
+
 			this.tile.setUnit(null);
 		}
 	}
@@ -124,7 +116,7 @@ public class Creature extends Card implements MoveableUnit {
 	}
 
 	public void actionableTiles(ActorRef out, GameState gameState){
-
+		UnitCommands.actionableTiles(this, out, gameState);
 	}
 
 	public Tile getTile() {

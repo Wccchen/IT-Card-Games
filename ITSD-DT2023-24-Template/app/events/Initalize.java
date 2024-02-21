@@ -9,7 +9,10 @@ import demo.Loaders_2024_Check;
 import structures.GameState;
 import structures.basic.*;
 import utils.BasicObjectBuilders;
+import utils.OrderedCardLoader;
 import utils.StaticConfFiles;
+
+import java.util.ArrayList;
 
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
@@ -26,6 +29,7 @@ public class Initalize implements EventProcessor{
 	public static void main(String[] args) {
 		Player testPlayer = new Player (true); //sign of game started
 		Avatar avatar = new Avatar(testPlayer);
+
 		System.out.println(avatar.getAttack());
 		System.out.println(avatar.getCurrentHealth());
 	}
@@ -39,7 +43,7 @@ public class Initalize implements EventProcessor{
 		gameState.something = true;
 		// User 1 makes a change
 //		CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-//		//Loaders_2024_Check.test(out);
+//		Loaders_2024_Check.test(out);
 		//board rendering below
 		Board board = gameState.getBoard(); //Render Board
 		board.renderBoard(out);
@@ -47,6 +51,10 @@ public class Initalize implements EventProcessor{
 		//code for setting mana and health
 		int manaGained = gameState.getTurnNumber()+1;
 		Player player1 = gameState.getPlayer1();
+		//draw player1's initial 3 cards
+		player1.drawCard();
+		player1.drawCard();
+		player1.drawCard();
 		player1.setMana(player1.getMana()+manaGained, out);
 		BasicCommands.setPlayer1Health(out, player1); //only needed here, after this Player.setHealth will handle this
 
@@ -78,6 +86,7 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, aiAvatar.getUnit(), aiAvatar.getAttack());
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
+
 
 
 
