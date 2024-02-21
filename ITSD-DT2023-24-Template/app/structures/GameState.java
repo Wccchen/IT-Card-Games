@@ -117,4 +117,5 @@ public class GameState {
 	public void setLastTileClicked(Tile lastTileClicked) {
 		this.lastTileClicked = lastTileClicked;
 	}
+	
 }

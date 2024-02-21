@@ -25,7 +25,7 @@ public class OrderedCardLoader {
 		List<Card> cardsInDeck = new ArrayList<Card>(20);
 		
 		int cardID = 1;
-		for (int i =0; i<copies; i++) {
+		for (int i =0; i< copies; i++) {
 			for (String filename : new File(cardsDIR).list()) {
 				if (filename.startsWith("1_")) {
 					// this is a deck 1 card
@@ -48,7 +48,7 @@ public class OrderedCardLoader {
 		List<Card> cardsInDeck = new ArrayList<Card>(20);
 		
 		int cardID = 1;
-		for (int i =0; i<copies; i++) {
+		for (int i =0; i < copies; i++) {
 			for (String filename : new File(cardsDIR).list()) {
 				if (filename.startsWith("2_")) {
 					// this is a deck 2 card

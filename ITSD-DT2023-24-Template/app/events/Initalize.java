@@ -24,7 +24,7 @@ import utils.StaticConfFiles;
  */
 public class Initalize implements EventProcessor{
 	public static void main(String[] args) {
-		Player testPlayer = new Player (true);
+		Player testPlayer = new Player (true); //sign of game started
 		Avatar avatar = new Avatar(testPlayer);
 		System.out.println(avatar.getAttack());
 		System.out.println(avatar.getCurrentHealth());
@@ -34,14 +34,14 @@ public class Initalize implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		// hello this is a change
 
-		gameState.gameInitalised = true;
+		gameState.gameInitalised = true; //Setting Game Initialization Flag 
 
 		gameState.something = true;
 		// User 1 makes a change
 //		CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 //		//Loaders_2024_Check.test(out);
 		//board rendering below
-		Board board = gameState.getBoard();
+		Board board = gameState.getBoard(); //Render Board
 		board.renderBoard(out);
 //		//insert code for creating and rendering hand, maybe contain it within player?
 		//code for setting mana and health
@@ -57,19 +57,19 @@ public class Initalize implements EventProcessor{
 		Avatar playerAvatar = new Avatar(player1);
 		Avatar aiAvatar = new Avatar(player2);
 
-		Tile playerStartTile = gameState.getBoard().getTile(1,2);
+		Tile playerStartTile = gameState.getBoard().getTile(1,2); //*placing player's avatar in specific tile.
 		//we could make this neater later
 		playerStartTile.setUnit(playerAvatar); //sets player avatar in back end
 		//need the following two commands Unit.setPositionByTile and BasicCommands.drawUnit for initial summon
 		playerAvatar.getUnit().setPositionByTile(playerStartTile);//sets player avatar on tile in front end
 		BasicCommands.drawUnit(out, playerAvatar.getUnit(), playerStartTile); //sets player avatar on tile in front end
-		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();} 
 		BasicCommands.setUnitHealth(out, playerAvatar.getUnit(), playerAvatar.getCurrentHealth());
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, playerAvatar.getUnit(), playerAvatar.getAttack());
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
 
-		Tile aiStartTile = gameState.getBoard().getTile(7,2);
+		Tile aiStartTile = gameState.getBoard().getTile(7,2); //*placing ai's avatar in specific tile.
 		aiStartTile.setUnit(aiAvatar); //sets ai avatar on tile in back end
 		aiAvatar.getUnit().setPositionByTile(aiStartTile);//sets ai avatar on tile in front end
 		BasicCommands.drawUnit(out,aiAvatar.getUnit(),aiStartTile); //sets ai avatar on tile in front end
@@ -78,6 +78,8 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, aiAvatar.getUnit(), aiAvatar.getAttack());
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
+
+
 
 
 

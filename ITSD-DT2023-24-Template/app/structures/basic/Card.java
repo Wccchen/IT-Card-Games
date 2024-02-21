@@ -22,7 +22,9 @@ public class Card {
 	
 	boolean isCreature;
 	String unitConfig;
-	
+
+
+
 	public Card() {};
 	
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard, boolean isCreature, String unitConfig) {
@@ -87,3 +89,4 @@ public class Card {
 
 	
 }
+

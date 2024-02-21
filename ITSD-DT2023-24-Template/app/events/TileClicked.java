@@ -32,7 +32,8 @@ public class TileClicked implements EventProcessor{
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		try {Thread.sleep(250);} catch (InterruptedException e) {e.printStackTrace();}
-		int tilex = message.get("tilex").asInt();
+		//extracts cordinate X, Y
+		int tilex = message.get("tilex").asInt();  //.asInt(); is to Transfer the cordinate  into integer
 		int tiley = message.get("tiley").asInt();
 		
 		if (gameState.something == true) {
@@ -40,7 +41,7 @@ public class TileClicked implements EventProcessor{
 			Tile currentTile = gameState.getBoard().getTile(tilex, tiley);
 
 			if (currentTile.getUnit() != null){
-				//logic for if current tile has unit
+				//logic for if current tile has unit (Tile with Unit)
 
 				if(currentTile.getUnit().isUserOwned()){
 					//if unit clicked was friendly.
@@ -48,7 +49,7 @@ public class TileClicked implements EventProcessor{
 						//insert logic about highlighting appropriate tiles for move/attack
 						MoveableUnit unit = currentTile.getUnit();
 						System.out.println("Friendly unit clicked, test that it has detected");
-						unit.actionableTiles(out,gameState);
+						unit.actionableTiles(out,gameState); // Highlighting possible actions.
 
 					}else if(gameState.getLastMessage().equals(GameState.spellCardClicked)||gameState.getLastMessage().equals("CreatureCardClicked")){
 						//insert message to player saying card can't be played here
