@@ -137,6 +137,12 @@ public class AI extends Player implements MoveableUnit {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void summon(ActorRef out, Tile tile, GameState gameState) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	
