@@ -22,6 +22,7 @@ public class BasicObjectBuilders {
 	@JsonIgnore
 	protected static ObjectMapper mapper = new ObjectMapper(); // Jackson Java Object Serializer, is used to read java objects from a file
 
+
 	/**
 	 * This class produces a Card object (or anything that extends Card) given a configuration
 	 * file. Configuration files can be found in the conf/gameconfs directory. The card should

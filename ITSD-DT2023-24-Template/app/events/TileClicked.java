@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import structures.GameState;
-import structures.basic.MoveableUnit;
-import structures.basic.Tile;
+import structures.basic.*;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a tile.
@@ -52,7 +51,8 @@ public class TileClicked implements EventProcessor{
 
 					}else if(gameState.getLastMessage().equals(GameState.spellCardClicked)||gameState.getLastMessage().equals("CreatureCardClicked")){
 						//insert message to player saying card can't be played here
-						//set last message to NoEvent
+						//set last message to NoEvent#
+						//dehighlight card?
 					}else{
 						//other logic?? think can delete
 					}
@@ -74,6 +74,7 @@ public class TileClicked implements EventProcessor{
 					}else if(gameState.getLastMessage().equals(GameState.creatureCardClicked)){
 						//inform player that not action can be taken
 						//set last message to NoEvent
+						//dehighlight card
 					}
 				}
 
@@ -85,6 +86,15 @@ public class TileClicked implements EventProcessor{
 
 				}else if (gameState.getLastMessage().equals(GameState.creatureCardClicked)){
 					//initiate summon logic
+					System.out.println("summon logic");
+					Player player1 = gameState.getPlayer1();
+					Card card = player1.getHand().get(gameState.getLastCardClicked()-2);
+					System.out.println(card.getCardname());
+					player1.playCard(gameState.getLastCardClicked(),out);
+					MoveableUnit m = (Creature) card;
+					m.summon(out,currentTile, gameState);
+
+					//
 				}else if (gameState.getLastMessage().equals(GameState.noEvent)){
 					//inform player no action
 				}else if (gameState.getLastMessage().equals(GameState.spellCardClicked)){

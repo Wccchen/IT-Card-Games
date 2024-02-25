@@ -10,7 +10,7 @@ import utils.BasicObjectBuilders;
 import utils.StaticConfFiles;
 import utils.UnitCommands;
 
-public class Avatar implements MoveableUnit {
+public class Avatar implements MoveableUnit{
     private int maxHealth;
     private int currentHealth;
     private int attack;
@@ -69,6 +69,10 @@ public class Avatar implements MoveableUnit {
 		this.currentHealth = currentHealth;
 		BasicCommands.setUnitHealth(out, this.unit,this.currentHealth); //renders on front end
 		this.player.setHealth(this.currentHealth, out); // to set player health when avatar takes dmg
+		 /* try {
+	            Thread.sleep(50);
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();}*/
 		
 	}
 
@@ -146,6 +150,7 @@ public class Avatar implements MoveableUnit {
 	
 	public void setTile(Tile tile) {
 		 this.tile = tile;
+		 
 	}
 
 	@Override
@@ -156,6 +161,11 @@ public class Avatar implements MoveableUnit {
 	@Override
 	public void setLastTurnAttacked(int lastTurnAttacked) {
 		this.lastTurnAttacked=lastTurnAttacked;
+	}
+
+	@Override
+	public void summon(ActorRef out, Tile tile, GameState gameState) {
+		//not needed for Avatar (actually could call with in initialise for consistency)
 	}
 
 

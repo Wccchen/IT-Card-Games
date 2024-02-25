@@ -8,8 +8,12 @@ import structures.basic.Unit;
 
 public class RockPulveriser extends Creature implements Provoke{
 
-    public RockPulveriser(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard, boolean isCreature, String unitConfig, int maxHealth, int currentHealth, int attack, int turnSummoned, int lastTurnMoved, Unit unit, boolean userOwned) {
-        super(id, cardname, manacost, miniCard, bigCard, isCreature, unitConfig, maxHealth, currentHealth, attack, turnSummoned, lastTurnMoved,unit, userOwned);
+    public RockPulveriser(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard, boolean isCreature,  String unitConfig) {
+        super(id, cardname, manacost, miniCard, bigCard, isCreature, unitConfig);
+        this.userOwned = true;
+        this.attack = 1;
+        this.currentHealth = 4;
+        this.maxHealth = currentHealth;
     }
 
 	@Override
