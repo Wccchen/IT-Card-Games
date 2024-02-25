@@ -1,14 +1,13 @@
 package structures;
 
-<<<<<<< HEAD
+
 import structures.basic.MoveableUnit;
 import structures.basic.Player;
 import structures.basic.Board;
 import structures.basic.Tile;
 import structures.basic.AI;
-=======
 import structures.basic.*;
->>>>>>> a84f6fc038750721b17cd4a04c3956fcbea566cb
+
 
 /**
  * This class can be used to hold information about the on-going game.
