@@ -1,6 +1,8 @@
 package allCards;
 
+import akka.actor.ActorRef;
 import structures.basic.BigCard;
+import structures.basic.Board;
 import structures.basic.Creature;
 import structures.basic.Deathwatch;
 import structures.basic.MiniCard;
@@ -19,7 +21,7 @@ public class BloodmoonPriestess extends Creature implements Deathwatch{
 
     //Summon a Wraithling on a randomly selected unoccupied adjacent tile
 	@Override
-	public void deathWatch() {
+	public void deathWatch(ActorRef out, Board board) {
 		// need summon command
 		
 	}

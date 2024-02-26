@@ -22,6 +22,7 @@ public class Creature extends Card implements MoveableUnit {
 	protected int lastTurnAttacked;
 
 	protected boolean isStunned;
+	protected Board board;
 
 	//need to change constructor for creature
 	public Creature (int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard, boolean isCreature, String unitConfig) {
@@ -79,6 +80,7 @@ public class Creature extends Card implements MoveableUnit {
 			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.death);
 			try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out,this.unit);
+			this.board.unitDeath(out);
 
 			this.tile.setUnit(null);
 		}
@@ -155,6 +157,11 @@ public class Creature extends Card implements MoveableUnit {
 
 
 	}
-
+	public Board getBoard() {
+		return this.board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 
 }

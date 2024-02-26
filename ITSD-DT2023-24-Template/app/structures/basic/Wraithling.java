@@ -22,7 +22,8 @@ public class Wraithling implements MoveableUnit{
 	private int lastTurnAttacked;
 
 	private boolean isStunned;
-
+	private Board board;
+	
 	public Wraithling() {
 		this.maxHealth = 1;
 		this.attack = 1;
@@ -72,6 +73,7 @@ public class Wraithling implements MoveableUnit{
 			try {Thread.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.deleteUnit(out,this.unit);
 			this.tile.setUnit(null);
+			this.board.unitDeath(out);
 
 		}
 	}
@@ -170,6 +172,11 @@ public class Wraithling implements MoveableUnit{
 	public void setStunned(boolean stunned) {
 		isStunned = stunned;
 	}
-
+	public Board getBoard() {
+		return this.board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 
 }

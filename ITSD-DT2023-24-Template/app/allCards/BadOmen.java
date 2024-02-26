@@ -1,6 +1,8 @@
 package allCards;
 
-import structures.basic.BigCard;	
+import akka.actor.ActorRef;
+import structures.basic.BigCard;
+import structures.basic.Board;
 import structures.basic.Creature;
 import structures.basic.Deathwatch;
 import structures.basic.MiniCard;
@@ -18,7 +20,7 @@ public class BadOmen extends Creature implements Deathwatch{
 
     // +1 attack permanently
     @Override
-    public void deathWatch() {
+    public void deathWatch(ActorRef out, Board board) {
 		this.setAttack(getAttack()+1, null);
 	}
 }

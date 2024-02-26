@@ -28,6 +28,7 @@ public class Avatar implements MoveableUnit, Provoke{
 	private int lastTurnAttacked;
 
 	private boolean isStunned = false;
+	private Board board;
 
 	public Avatar(Player player) {
 		this.player = player;
@@ -212,6 +213,13 @@ public class Avatar implements MoveableUnit, Provoke{
 	@Override
 	public void summon(ActorRef out, Tile tile, GameState gameState) {
 		//not needed for Avatar (actually could call with in initialise for consistency)
+	}
+	
+	public Board getBoard() {
+		return this.board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package allCards;
 
+import akka.actor.ActorRef;
 import structures.basic.BigCard;
+import structures.basic.Board;
 import structures.basic.Creature;
 import structures.basic.Deathwatch;
 import structures.basic.MiniCard;
@@ -19,8 +21,8 @@ public class ShadowWatcher extends Creature implements Deathwatch{
     
     //gains +1 attack +1 hp permanently (max health)
 	@Override
-	public void deathWatch() {
-		this.setAttack(getAttack()+1, null);
+	public void deathWatch(ActorRef out, Board board) {
+		this.setAttack(getAttack()+1, out);
 		this.setMaxHealth(getMaxHealth()+1);
 	}
 }
