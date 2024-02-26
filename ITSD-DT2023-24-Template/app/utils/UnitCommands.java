@@ -163,13 +163,14 @@ public class UnitCommands {
         }
         return false;
     }
-
+/*
     public static void actionableTiles(MoveableUnit mover, ActorRef out, GameState gameState){
         //need to add logic about last turnMoved and lastTurn attacked and turnSummoned
         System.out.println("Actionable tiles is running.");
         int xPos = mover.getTile().getTilex();
         int yPos = mover.getTile().getTiley();
         Board board = gameState.getBoard();
+        boolean hasProvokeAdjacent = false;
 
         if (mover.getTurnSummoned()!=gameState.getTurnNumber()){//hasn't been summoned this turn, allow action
             System.out.println("Unit hasn't been summoned this turn");
@@ -182,29 +183,39 @@ public class UnitCommands {
                     gameState.setLastUnitClicked(mover);
                     gameState.setLastMessage(GameState.friendlyUnitClicked);
                     
-                    boolean hasProvokeAdjacent = false;
+                   // boolean hasProvokeAdjacent = false;
                     
                     //Loop through adjacent squares
                     for (int i = xPos - 1; i<=xPos+1;i++){ // i is x
                         for (int j = yPos -1 ; j<=yPos+1;j++){ // j is y
                             if ( 0<=i && i<=8 && 0<=j && j<=4 ){ //if coord in board range
                                 Tile highlightTile = board.getTile(i,j);
-                                if (highlightTile.getUnit()==null){//tile has no unit, safe for highlighting
-                                    BasicCommands.drawTile(out,highlightTile, 1);
-//									System.out.println(i + " " + j);
-                                } else if (highlightTile.getUnit() instanceof Provoke) {
-                                    BasicCommands.drawTile(out,highlightTile, 2);
-                                    hasProvokeAdjacent = true;
+                               // if (highlightTile.getUnit()==null){//tile has no unit, safe for highlighting
+                                if (highlightTile.getUnit() instanceof Provoke && mover.isUserOwned() != highlightTile.getUnit().isUserOwned()) {   
+                                	BasicCommands.drawTile(out,highlightTile, 2);
                                     BasicCommands.addPlayer1Notification(out, "This unit is within range of a Provoke ability. Cannot move & can only attack provokers.", 2);
+                                    hasProvokeAdjacent = true;
+                                	mover.setLastTurnMoved(gameState.getTurnNumber()); //Unit cannot move
+                                	//BasicCommands.drawTile(out,highlightTile, 1);
+//									System.out.println(i + " " + j);
+                               // } else if (highlightTile.getUnit()==null) {
+                                //	BasicCommands.drawTile(out,highlightTile, 1);
+                                	//BasicCommands.drawTile(out,highlightTile, 2);
+                                    //BasicCommands.addPlayer1Notification(out, "This unit is within range of a Provoke ability. Cannot move & can only attack provokers.", 2);
+                                    //hasProvokeAdjacent = true;
+                                	//mover.setLastTurnMoved(gameState.getTurnNumber()); //Unit cannot move
 
+
+                                    //BasicCommands.drawTile(out,highlightTile, 1);
                                 }
                             }
                         }
                     }
                     
                     //Provoke logic
-                    if (hasProvokeAdjacent) {
+                    if (hasProvokeAdjacent = true) {
                     	mover.setLastTurnMoved(gameState.getTurnNumber()); //Unit cannot move
+                    	
                     }
                     
                     
@@ -293,6 +304,68 @@ public class UnitCommands {
             gameState.setLastMessage(GameState.noEvent);
             BasicCommands.addPlayer1Notification(out, "This unit was summoned this turn, it can't perform an action.", 2);
 
+        }
+    }
+*/
+    public static void actionableTiles(MoveableUnit mover, ActorRef out, GameState gameState){
+        System.out.println("Actionable tiles is running.");
+        int xPos = mover.getTile().getTilex();
+        int yPos = mover.getTile().getTiley();
+        Board board = gameState.getBoard();
+        boolean hasProvokeAdjacent = false;
+
+        if (mover.getTurnSummoned() != gameState.getTurnNumber()) {
+            if (mover.getLastTurnAttacked() != gameState.getTurnNumber()) {
+                if (mover.getLastTurnMoved() != gameState.getTurnNumber()) {
+                    gameState.setLastUnitClicked(mover);
+                    gameState.setLastMessage(GameState.friendlyUnitClicked);
+
+                    for (int i = xPos - 1; i <= xPos + 1; i++) {
+                        for (int j = yPos - 1; j <= yPos + 1; j++) {
+                            if (0 <= i && i <= 8 && 0 <= j && j <= 4) {
+                                Tile highlightTile = board.getTile(i, j);
+                                if (highlightTile.getUnit() instanceof Provoke &&
+                                        mover.isUserOwned() != highlightTile.getUnit().isUserOwned()) {
+                                    BasicCommands.drawTile(out, highlightTile, 2);
+                                    BasicCommands.addPlayer1Notification(out, "This unit is within range of a Provoke ability. Cannot move & can only attack provokers.", 2);
+                                    hasProvokeAdjacent = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!hasProvokeAdjacent) {
+                        for (int i = xPos - 1; i <= xPos + 1; i++) {
+                            for (int j = yPos - 1; j <= yPos + 1; j++) {
+                                if (0 <= i && i <= 8 && 0 <= j && j <= 4) {
+                                    Tile highlightTile = board.getTile(i, j);
+                                    if (highlightTile.getUnit() == null) {
+                                        BasicCommands.drawTile(out, highlightTile, 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    BasicCommands.addPlayer1Notification(out, "This unit has already moved, it can only attack", 2);
+                    gameState.setLastUnitClicked(mover);
+                    gameState.setLastMessage(GameState.friendlyUnitClicked);
+                    for (int i = xPos - 1; i <= xPos + 1; i++) {
+                        for (int j = yPos - 1; j <= yPos + 1; j++) {
+                            if (0 <= i && i <= 8 && 0 <= j && j <= 4) {
+                                Tile highlightTile = board.getTile(i, j);
+                                if (highlightTile.getUnit() != null && mover.isUserOwned() != highlightTile.getUnit().isUserOwned()) {
+                                    BasicCommands.drawTile(out, highlightTile, 2);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                BasicCommands.addPlayer1Notification(out, "This unit has already attacked, it can't perform another action", 2);
+            }
+        } else {
+            BasicCommands.addPlayer1Notification(out, "This unit was summoned this turn, it can't perform an action.", 2);
         }
     }
 
