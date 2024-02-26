@@ -3,12 +3,16 @@ package structures.basic;
 import akka.actor.ActorRef;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import commands.BasicCommands;
+import scala.Int;
 import structures.GameState;
 import structures.basic.MoveableUnit;
 import structures.basic.Player;
 import utils.BasicObjectBuilders;
 import utils.StaticConfFiles;
 import utils.UnitCommands;
+
+import java.util.List;
+import java.util.Random;
 
 public class Avatar implements MoveableUnit{
     private int maxHealth;
@@ -22,6 +26,8 @@ public class Avatar implements MoveableUnit{
 	@JsonIgnore
 	private Tile tile;
 	private int lastTurnAttacked;
+
+	private boolean isStunned = false;
 
 	public Avatar(Player player) {
 		this.player = player;
@@ -38,11 +44,50 @@ public class Avatar implements MoveableUnit{
 		}
 	}
 
+	public boolean isStunned() {
+		return isStunned;
+	}
 
+	public void setStunned(boolean stunned) {
+		isStunned = stunned;
+	}
 
 	@Override
 	public void attackUnit( ActorRef out, Tile tile, GameState gameState) {
 		UnitCommands.attackUnit(this, out, tile, gameState);
+		if (gameState.getPlayer1().getHornOfTheForsakenHealth() > 0) {
+			boolean wraithlingSummoned = false;
+			int tileX = tile.getTilex();
+			int tileY = tile.getTiley();
+			// coords around unit
+			int[][] areaAroundUnit = {
+					{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},{0, 1},{1, -1}, {1, 0}, {1, 1}
+			};
+
+			while (!wraithlingSummoned) {
+				Random random = new Random();
+
+				int randomSelection = random.nextInt(8);
+
+				// Select a random area from above
+				int[] randomArea = areaAroundUnit[randomSelection];
+
+				// New coords
+				int xToCheck = tileX + randomArea[0];
+				int yToCheck = tileY + randomArea[1];
+
+				Tile tileToCheck = gameState.getBoard().getTile(xToCheck,yToCheck);
+
+				if (UnitCommands.canSummon(gameState, true, tileToCheck)) {
+					Wraithling wraithling = new Wraithling();
+					wraithling.summon(out, tileToCheck, gameState);
+					wraithlingSummoned = true;
+				}
+			}
+
+
+		} else {
+		}
 	}
 
 
@@ -69,6 +114,7 @@ public class Avatar implements MoveableUnit{
 		this.currentHealth = currentHealth;
 		BasicCommands.setUnitHealth(out, this.unit,this.currentHealth); //renders on front end
 		this.player.setHealth(this.currentHealth, out); // to set player health when avatar takes dmg
+		this.player.setHornOfTheForsakenHealth(this.player.getHornOfTheForsakenHealth() - 1);
 		 /* try {
 	            Thread.sleep(50);
 	        } catch (InterruptedException e) {

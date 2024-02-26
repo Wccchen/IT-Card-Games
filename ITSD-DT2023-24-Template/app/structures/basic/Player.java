@@ -3,6 +3,7 @@ package structures.basic;
 import actors.GameActor;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import structures.GameState;
 import utils.OrderedCardLoader;
 
 import java.util.ArrayList;
@@ -18,19 +19,21 @@ import java.util.List;
  */
 public class Player {
 
-	private ArrayList<Card> hand = new ArrayList<>();
-	private ArrayList<Card> discardPile = new ArrayList<>();
+	protected ArrayList<Card> hand = new ArrayList<>();
+	protected ArrayList<Card> discardPile = new ArrayList<>();
 
-	private List<Card> playerDeck = new ArrayList<>();
-	private int health;
-	private int mana;
-    private boolean userOwned;
-    private CardConverter cardConverterObject;
+	protected List<Card> playerDeck = new ArrayList<>();
+	protected int health;
+	protected int mana;
+    protected boolean userOwned;
+    protected CardConverter cardConverterObject;
 
 	private final OrderedCardLoader orderedCardLoader = new OrderedCardLoader();
 
 	private int lastCardClickedIndex = -1;
 	private Card lastCardClickedCard = null;
+
+	private int hornOfTheForsakenHealth = 0;
 
 	public Player(boolean userOwned) {
 		super();
@@ -57,6 +60,14 @@ public class Player {
 		super();
 		this.health = health;
 		this.mana = mana;
+	}
+
+	public int getHornOfTheForsakenHealth() {
+		return hornOfTheForsakenHealth;
+	}
+
+	public void setHornOfTheForsakenHealth(int hornOfTheForsakenHealth) {
+		this.hornOfTheForsakenHealth = hornOfTheForsakenHealth;
 	}
 
 	public int getLastCardClickedIndex() {
@@ -149,6 +160,7 @@ public class Player {
 				}
 				this.getPlayerDeck().remove(0);
 			} else {
+				// Change this to end the game once end game logic implemented, same with below
 				System.out.println("deck is empty");
 			}
 		} else {
@@ -163,6 +175,7 @@ public class Player {
 				}
 				this.getPlayerDeck().remove(0);
 			} else {
+				// Also change this to end the game once end game logic implemented
 				System.out.println("deck is empty");
 			}
 		}
@@ -215,17 +228,20 @@ public class Player {
 			this.hand.remove(cardSelected); //removes card in backEnd
 			BasicCommands.deleteCard(out, handPosition);
 			renderHand(out);
-			if (cardSelected.isCreature) {
-//			summonCreature(cardSelected);
-			} else {
-				((Spell) cardSelected).spellEffect();
-			}
 		} else {
-			System.out.println("Player does not have enough mana");
+			BasicCommands.addPlayer1Notification(out, "You don't have enough mana!", 5);
 		}
 
-
 	}
+
+//	public void playCard(ActorRef out, Card cardSelected) {
+//
+//			if (cardSelected.isCreature) {
+////			summonCreature(cardSelected);
+//			} else {
+//				((Spell) cardSelected).spellEffect(out, this);
+//		}
+//	}
 
 	public void printHand() {
 		System.out.println("===HANDPRINT===");
@@ -249,6 +265,7 @@ public class Player {
 		this.health = health;
 		if (this.userOwned){ //if human
 			BasicCommands.setPlayer1Health(out, this);
+
 		}else{
 			BasicCommands.setPlayer2Health(out, this);
 		}
