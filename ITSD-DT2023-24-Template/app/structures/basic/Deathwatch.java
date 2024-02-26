@@ -1,7 +1,9 @@
 package structures.basic;
 
+import akka.actor.ActorRef;
+
 public interface Deathwatch {
-    void deathWatch();
+    void deathWatch(ActorRef out, Board board);
     
     /*
      Units that have deathwatch are

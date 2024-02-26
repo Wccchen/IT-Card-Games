@@ -1,8 +1,10 @@
 package allCards;
 
+import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.basic.Avatar;
 import structures.basic.BigCard;
+import structures.basic.Board;
 import structures.basic.Creature;
 import structures.basic.Deathwatch;
 import structures.basic.MiniCard;
@@ -21,7 +23,7 @@ private Avatar avatar;
     }
 
 	@Override
-	public void deathWatch() {
+	public void deathWatch(ActorRef out, Board board) {
 		// TODO Auto-generated method stub
 		int newHealth = avatar.getCurrentHealth()+1;
 		avatar.setCurrentHealth(newHealth, null);
