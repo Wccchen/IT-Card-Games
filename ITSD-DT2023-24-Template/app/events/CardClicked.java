@@ -32,15 +32,18 @@ public class CardClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		int handPosition = message.get("position").asInt();
+		gameState.getBoard().renderBoard(out);
 
 		Player player1 = gameState.getPlayer1();
 		ArrayList<Card> hand = player1.getHand();
 
 		Card card = hand.get(handPosition -2 );
 		System.out.println("Took card at index " + (handPosition-2));
+		player1.unhighlightAllCards(out);
 		System.out.println(card.getCardname() + " clicked");
 		if (player1.getMana()>=card.getManacost()) { //player has enough mana
 			player1.highlightCardInHand(handPosition,out);
+
 			gameState.setLastCardClicked(handPosition); // position in rendering
 			if (card instanceof Creature) {
 				gameState.setLastMessage(GameState.creatureCardClicked);
