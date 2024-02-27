@@ -6,6 +6,7 @@ import structures.basic.Player;
 import structures.basic.Board;
 import structures.basic.Tile;
 import structures.basic.AI;
+import akka.actor.ActorRef;
 import structures.basic.*;
 
 
@@ -49,10 +50,11 @@ public class GameState {
 	public static final String sundropElixirClicked = "SundropElixirClicked";
 	private int frontEndUnitID;
 	private int frontEndCardID;
+	private ActorRef actorRef;
 
 	public GameState() {
 		this.player1 = new Player(true);
-		this.player2 = new AI(false);
+		this.player2 = new AI(false,this,actorRef);
 		this.board = new Board();
 	}
 
