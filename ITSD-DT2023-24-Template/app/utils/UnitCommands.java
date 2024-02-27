@@ -298,7 +298,8 @@ public class UnitCommands {
 
     public static void summon (MoveableUnit summon, ActorRef out, Tile tile, GameState gameState){
         boolean userOwned = summon.isUserOwned();
-        summon.setBoard(gameState.getBoard());
+        //the line 302 causes crush
+        //summon.setBoard(gameState.getBoard());
         if (canSummon(gameState,userOwned,tile)) {
             tile.setUnit(summon);
             summon.getUnit().setPositionByTile(tile);//sets player avatar on tile in front end
