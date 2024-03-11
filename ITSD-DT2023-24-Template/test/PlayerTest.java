@@ -1,3 +1,10 @@
+/**
+ * This class is for testing the Player class.
+ * 
+ * testGetAvatar: Checks if the player's avatar is set and retrieved correctly.
+ * 
+ * testDrawCard: Checks if a card is correctly drawn from the player's deck to their hand.
+ */
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.Mockito;
